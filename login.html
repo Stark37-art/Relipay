@@ -142,7 +142,8 @@
     const password = document.getElementById('loginPassword').value.trim();
 
     try {
-      const res = await fetch('http://localhost:3000/login', {
+      const res = await fetch('https://reli-pay-backend-3.onrender.com/login', {
+
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -171,7 +172,8 @@
     const password = document.getElementById('signupPassword').value.trim();
 
     try {
-      const res = await fetch('http://localhost:3000/signup', {
+      const res = await fetch('https://reli-pay-backend-3.onrender.com/signup', {
+
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, email, password })
