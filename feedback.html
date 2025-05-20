@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Feedback - ReliPay</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0; padding: 0;
+      background: #f9f9f9;
+      color: #333;
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #004aad;
+      color: white;
+      padding: 10px 20px;
+      position: sticky;
+      top: 0;
+      flex-wrap: wrap;
+    }
+    .logo {
+      font-weight: bold;
+      font-size: 24px;
+    }
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    .nav-left {
+      display: flex;
+      flex-direction: column;
+    }
+    .nav-right a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 8px 12px;
+      border: 1px solid white;
+      border-radius: 4px;
+    }
+    .nav-right a:hover {
+      background: white;
+      color: #004aad;
+    }
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    h1 {
+      color: #004aad;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    form {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin: 15px 0 5px;
+      font-weight: bold;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1em;
+      resize: vertical;
+    }
+    button {
+      margin-top: 20px;
+      background: #004aad;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      font-size: 1em;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #003080;
+    }
+    .testimonials {
+      margin-top: 50px;
+    }
+    .testimonial {
+      background: #004aad;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-style: italic;
+    }
+    .feedback-message {
+      margin-top: 15px;
+      font-weight: bold;
+      text-align: center;
+      color: green;
+    }
+    .feedback-error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-left">
+      <div class="logo">ReliPay</div>
+      <div class="nav-links">
+        <a href="index.html" style="color:white; text-decoration:none;">Home</a>
+        <a href="start.html" style="color:white; text-decoration:none;">Start Earning</a>
+        <a href="about.html" style="color:white; text-decoration:none;">About Us</a>
+        <a href="feedback.html" style="color:white; text-decoration:none;">Feedback</a>
+      </div>
+    </div>
+    <div class="nav-right">
+      <a href="#">Sign Up / Login</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>We Value Your Feedback</h1>
+    <form id="feedbackForm">
+      <label for="name">Name</label>
+      <input type="text" id="name" placeholder="Your name" required />
+
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="Your email" required />
+
+      <label for="message">Message</label>
+      <textarea id="message" rows="5" placeholder="Write your feedback here..." required></textarea>
+
+      <button type="submit">Submit Feedback</button>
+      <div id="formMessage" class="feedback-message"></div>
+    </form>
+
+    <section class="testimonials">
+      <h2 style="color:#004aad; text-align:center;">What Users Say</h2>
+      <div class="testimonial">"ReliPay helped me earn extra income easily. Great platform!" - Anjali K.</div>
+      <div class="testimonial">"Simple tasks, real rewards. Highly recommended!" - Rajesh P.</div>
+    </section>
+  </div>
+
+  <script>
+    const form = document.getElementById('feedbackForm');
+    const formMessage = document.getElementById('formMessage');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Clear previous messages
+      formMessage.textContent = '';
+      formMessage.classList.remove('feedback-error');
+
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const message = document.getElementById('message').value.trim();
+
+      if (!name || !email || !message) {
+        formMessage.textContent = 'Please fill out all fields.';
+        formMessage.classList.add('feedback-error');
+        return;
+      }
+
+      try {
+        const response = await fetch("https://reli-pay-backend-3.onrender.com/submit-feedback", {
+
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ name, email, message })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          formMessage.textContent = data.message || 'Thank you for your feedback!';
+          form.reset();
+        } else {
+          throw new Error(data.message || 'Failed to submit feedback.');
+        }
+      } catch (error) {
+        formMessage.textContent = error.message;
+        formMessage.classList.add('feedback-error');
+      }
+    });
+  </script>
+
+</body>
+</html>
