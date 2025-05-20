@@ -107,7 +107,8 @@
     } else {
       async function fetchBalance() {
         try {
-          const res = await fetch(`http://localhost:3000/user/${encodeURIComponent(userEmail)}`);
+         const res = await fetch(`https://reli-pay-backend-3.onrender.com/user/${encodeURIComponent(userEmail)}`);
+
           if (!res.ok) throw new Error("Failed to fetch balance");
           const data = await res.json();
 
